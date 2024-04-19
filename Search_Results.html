@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Search-Results.css">
+    <title>Book Search Results - UniBookShare</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Book Search Results</h1>
+        <div class="search-tools">
+            <input type="text" placeholder="Search books..." id="searchInput">
+            <button onclick="performSearch()">Search</button>
+            <select id="sortOptions" onchange="sortResults()">
+                <option value="relevance">Sort by Relevance</option>
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+            </select>
+        </div>
+        <ul class="results-list">
+            <!-- Dynamically populated list of books based on the search -->
+        </ul>
+    </div>
+
+    <script>
+        function performSearch() {
+            // Implementation to search books based on input
+        }
+
+        function sortResults() {
+            // Implementation to sort the displayed results
+        }
+    </script>
+</body>
+</html>

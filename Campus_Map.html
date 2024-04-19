@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Campus_Map.css">
+    <title>Campus Map - UniBookShare</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap&libraries=&v=weekly" async></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Campus Map</h1>
+        <div id="map"></div>
+        <input type="text" id="searchInput" placeholder="Search for places...">
+        <button onclick="searchLocation()">Search</button>
+    </div>
+
+    <script src="campus-map.js"></script>
+</body>
+</html>
