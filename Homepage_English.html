@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Homepage_English.css"> <!-- Link to your CSS file -->
+    <title>University Book Sharing Platform</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#account">Account</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><button onclick="toggleLanguageMenu()">Language</button></li>
+                <!-- Add other navigation tabs here -->
+            </ul>
+        </nav>
+        <div id="languageMenu" style="display:none;">
+            <!-- Language selection dropdown or menu -->
+        </div>
+    </header>
+    
+    <main>
+        <h1>Welcome to UniBookShare</h1>
+        <p>Find and exchange books with fellow students easily.</p>
+        
+        <form id="searchForm">
+            <input type="text" id="searchInput" placeholder="Search for books...">
+            <button type="submit">Search</button>
+        </form>
+        
+        <!-- Content that might be loaded based on search -->
+        <section id="searchResults" style="display:none;">
+            <!-- Search results will be displayed here -->
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 UniBookShare</p>
+    </footer>
+    
+    <script>
+        function toggleLanguageMenu() {
+            var languageMenu = document.getElementById("languageMenu");
+            languageMenu.style.display = languageMenu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Assuming you would like to prevent the default form submission for AJAX search.
+        document.getElementById('searchForm').onsubmit = function(event) {
+            event.preventDefault();
+            // Implement the search logic or AJAX call here
+            var searchInput = document.getElementById('searchInput').value;
+            console.log('Searching for:', searchInput);
+            // Show search results
+            document.getElementById('searchResults').style.display = 'block';
+            // Populate search results
+            // ...
+        }
+    </script>
+</body>
+</html>

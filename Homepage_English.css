@@ -1,0 +1,103 @@
+/* Homepage_English.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fdfdfd;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #004d7a;
+    color: white;
+    padding: 10px 0;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    margin: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+header nav ul li a,
+header nav ul li button {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+header nav ul li button:hover,
+header nav ul li a:hover {
+    text-decoration: underline;
+}
+
+#languageMenu {
+    text-align: center;
+    padding: 10px 0;
+    background: #003559;
+    display: none; /* hidden by default */
+}
+
+main {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+h1 {
+    color: #003559;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #555;
+}
+
+#searchForm {
+    margin-top: 30px;
+}
+
+#searchInput {
+    padding: 10px;
+    width: 300px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+#searchForm button {
+    padding: 10px 20px;
+    background-color: #008cba;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#searchForm button:hover {
+    background-color: #007399;
+}
+
+footer {
+    background-color: #004d7a;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+}
