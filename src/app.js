@@ -1,18 +1,15 @@
-// Require the express module
 const express = require('express');
+const path = require('path');
 
-// Create an instance of express called 'app'
 const app = express();
-
-// Define the port number as a variable
 const PORT = process.env.PORT || 3000;
 
 // Serve static files from the 'public' directory
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Define a route for the root of the app
+// Send 'login.html' when the root route is accessed
 app.get('/', (req, res) => {
-  res.send('Welcome to UniBookShare!');
+  res.sendFile(path.join(__dirname, 'public', 'Login.html'));
 });
 
 // Start the server and listen on the specified port
