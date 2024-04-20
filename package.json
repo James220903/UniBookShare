@@ -2,8 +2,9 @@
   "name": "unibookshare",
   "version": "1.0.0",
   "description": "CampusNavigator is a comprehensive platform designed for university students, facilitating easy navigation around campus and enabling a book exchange system. This multilingual, user-friendly app helps students find academic buildings, essential services, and connect with peers for textbook trades.",
-  "main": "Campus_Map.js",
+  "main": "src/app.js",
   "scripts": {
+    "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
