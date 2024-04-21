@@ -29,17 +29,21 @@ mongoose.connect(mongoUri)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB', err));
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, '..', 'public')));
+
 
 
 // Parse incoming requests with JSON payloads
 app.use(express.json());
 
 // Routes
+// Serve static files from the 'public' directory correctly
+app.use(express.static(path.join(__dirname, 'public'))); // 'public' is at the same level as 'src'
+
+// Correctly send 'Login.html' when the root route is accessed
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'Login.html'));
+  res.sendFile(path.join(__dirname, 'public', 'Login.html')); // No '..' needed
 });
+
 
 // Add more route handlers here
 // Use routers
