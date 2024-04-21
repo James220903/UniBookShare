@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST a new user
-router.post('/', async (req, res) => {
+router.post('/submit-registration', async (req, res) => {
     try {
         // Hash the password before storing it
         const hashedPassword = await bcrypt.hash(req.body.password, 10);

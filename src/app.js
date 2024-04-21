@@ -34,6 +34,7 @@ mongoose.connect(mongoUri)
 
 // Parse incoming requests with JSON payloads
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
 
 // Routes
 // Serve static files from the 'public' directory correctly
