@@ -30,7 +30,8 @@ mongoose.connect(mongoUri)
   .catch(err => console.error('Could not connect to MongoDB', err));
 
 // Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public'))); // Assuming 'public' is in the root
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 
 // Parse incoming requests with JSON payloads
 app.use(express.json());
