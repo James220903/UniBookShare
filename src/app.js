@@ -43,6 +43,11 @@ app.use(express.static(path.join(__dirname, 'public'))); // 'public' is at the s
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Login.html')); // No '..' needed
 });
+// Route for serving the registration page
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Registration.html'));
+});
+
 
 
 // Add more route handlers here
