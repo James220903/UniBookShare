@@ -2,6 +2,9 @@ require('dotenv').config(); // Make sure to require 'dotenv' at the top
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const username = 'jamesthorley291'; // Replace with your actual username
+const password = encodeURIComponent('4auoXPWzYuGcxSU1'); // Replace with your actual password
+
 
 // Models
 const User = require('./models/User'); // Uncomment when User model is created
@@ -18,13 +21,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
-const mongoUri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qvjhqe8.mongodb.net/${process.env.DB_NAME}`;
-mongoose.connect(mongoUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true, // Ensure support for Mongoose's default index creation
-}).then(() => console.log('Connected to MongoDB database'))
-  .catch(err => console.error('Could not connect to MongoDB database', err));
+// Note that we're not specifying the database name in the URI
+const mongoUri = `mongodb+srv://${username}:${password}@cluster0.qvjhqe8.mongodb.net/`;
+
+// Connect to MongoDB
+mongoose.connect(mongoUri)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Could not connect to MongoDB', err));
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public'))); // Assuming 'public' is in the root
