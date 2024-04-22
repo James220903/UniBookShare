@@ -36,4 +36,37 @@ router.post('/submit-registration', async (req, res) => {
     }
 });
 
+// users.js
+
+// ... other required imports ...
+const bcrypt = require('bcrypt');
+const User = require('../models/User');
+
+// ... existing routes ...
+
+// POST route for user login
+router.post('/login', async (req, res) => {
+  try {
+    // Find the user by their email address
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(401).json({ message: "Login failed. User not found." });
+    }
+
+    // Compare the provided password with the stored hash
+    const isMatch = await bcrypt.compare(req.body.password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Login failed. Incorrect password." });
+    }
+
+    // Login successful, redirect to Homepage_English.html
+    res.redirect('/Homepage_English.html');
+  } catch (err) {
+    res.status(500).json({ message: "Server error." });
+  }
+});
+
+// ... export router ...
+module.exports = router;
+
 module.exports = router;
