@@ -9,7 +9,6 @@ const User = require('../models/User');
 router.get('/', async (req, res) => {
     try {
         const users = await User.find({});
-        // Exclude passwords from the results
         const userDtos = users.map(user => ({
             id: user._id,
             username: user.username,
@@ -35,7 +34,7 @@ router.post('/submit-registration', async (req, res) => {
             return res.status(409).json({ message: "Email already in use" });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password);
 
         const user = new User({
             username,
@@ -61,12 +60,16 @@ router.post('/submit-registration', async (req, res) => {
 // POST route for user login
 router.post('/login', async (req, res) => {
     try {
+        console.log('Attempting login with:', req.body.email);  // Log email attempt
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
+            console.log('Login failed: User not found with email:', req.body.email);
             return res.status(401).json({ message: "Login failed: User not found." });
         }
 
         const isMatch = await bcrypt.compare(req.body.password, user.password);
+        console.log(`Password match for ${req.body.email}: ${isMatch}`);  // Detailed logging for password match
+
         if (!isMatch) {
             return res.status(401).json({ message: "Login failed: Incorrect password." });
         }
@@ -74,7 +77,7 @@ router.post('/login', async (req, res) => {
         res.redirect('/Homepage_English.html');
     } catch (err) {
         console.error('Login error:', err);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Server error" });
     }
 });
 
