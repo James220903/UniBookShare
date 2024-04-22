@@ -36,13 +36,6 @@ router.post('/submit-registration', async (req, res) => {
     }
 });
 
-// users.js
-
-// ... other required imports ...
-const bcrypt = require('bcrypt');
-const User = require('../models/User');
-
-// ... existing routes ...
 
 // POST route for user login
 router.post('/login', async (req, res) => {
