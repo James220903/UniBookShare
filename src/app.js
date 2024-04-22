@@ -48,7 +48,10 @@ app.get('/', (req, res) => {
 app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Registration.html'));
 });
-
+// Route for serving the login from the registration page 
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Login.html'));
+});
 
 
 // Add more route handlers here
