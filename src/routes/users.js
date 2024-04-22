@@ -17,11 +17,10 @@ router.post('/submit-registration', async (req, res) => {
             return res.status(409).json({ message: "Email already in use" });
         }
 
-        // Directly use the plaintext password
         const user = new User({
             username,
             email,
-            password  // No hashing here
+            password  // No need to hash here; the model's pre-save hook will take care of it
         });
 
         const newUser = await user.save();
@@ -49,8 +48,11 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: "Login failed: User not found." });
         }
 
-        // Directly compare plaintext passwords
-        if (req.body.password !== user.password) {
+        // Use the comparePassword method defined in the User model
+        const isMatch = await user.comparePassword(req.body.password);
+        console.log(`Password match for ${req.body.email}: ${isMatch}`);  // Logging the result of the password comparison
+
+        if (!isMatch) {
             return res.status(401).json({ message: "Login failed: Incorrect password." });
         }
 
@@ -62,3 +64,5 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
+
+
