@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
         console.log('Submitted password:', req.body.password);
         console.log('Stored hashed password:', user.password);
 
-        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        const isMatch = await bcrypt.compare(req.body.password, user.password, 10);
         console.log('Password match:', isMatch);
 
         if (!isMatch) {
