@@ -52,10 +52,10 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Login.html'));
 });
-app.post('/api/users/login', async (req, res) => {
-  console.log(req.body); // Check what data is coming in
+//app.post('/api/users/login', async (req, res) => {
+  //console.log(req.body); // Check what data is coming in
   // Rest of your login logic...
-});
+//});
 
 
 

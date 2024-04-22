@@ -39,25 +39,31 @@ router.post('/submit-registration', async (req, res) => {
 
 // POST route for user login
 router.post('/login', async (req, res) => {
-  try {
-    // Find the user by their email address
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) {
-      return res.status(401).json({ message: "Login failed. User not found." });
-    }
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            console.log('User not found with email:', req.body.email);
+            return res.status(401).json({ message: "Login failed. User not found." });
+        }
 
-    // Compare the provided password with the stored hash
-    const isMatch = await bcrypt.compare(req.body.password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Login failed. Incorrect password." });
-    }
+        console.log('User found:', user);
+        console.log('Submitted password:', req.body.password);
+        console.log('Stored hashed password:', user.password);
 
-    // Login successful, redirect to Homepage_English.html
-    res.redirect('/Homepage_English.html');
-  } catch (err) {
-    res.status(500).json({ message: "Server error." });
-  }
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        console.log('Password match:', isMatch);
+
+        if (!isMatch) {
+            return res.status(401).json({ message: "Login failed. Incorrect password." });
+        }
+
+        res.redirect('/Homepage_English.html');
+    } catch (err) {
+        console.error('Login error:', err);
+        res.status(500).json({ message: "Server error." });
+    }
 });
+
 
 // ... export router ...
 module.exports = router;
