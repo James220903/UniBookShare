@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Account.css">
+    <title>Account Page</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Account</h2>
+
+        <section class="book-management">
+            <h3>Add a Book</h3>
+            <form action="/api/books/add" method="post">
+                <input type="text" name="title" placeholder="Book Title" required>
+                <input type="text" name="author" placeholder="Author" required>
+                <button type="submit">Add Book</button>
+            </form>
+        </section>
+
+        <section class="password-change">
+            <h3>Change Password</h3>
+            <form action="/api/users/change-password" method="post">
+                <input type="password" name="currentPassword" placeholder="Current Password" required>
+                <input type="password" name="newPassword" placeholder="New Password" required>
+                <button type="submit">Change Password</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

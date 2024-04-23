@@ -46,17 +46,44 @@
             languageMenu.style.display = languageMenu.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Assuming you would like to prevent the default form submission for AJAX search.
         document.getElementById('searchForm').onsubmit = function(event) {
             event.preventDefault();
-            // Implement the search logic or AJAX call here
             var searchInput = document.getElementById('searchInput').value;
             console.log('Searching for:', searchInput);
+            // Implement the search logic or AJAX call here
             // Show search results
             document.getElementById('searchResults').style.display = 'block';
-            // Populate search results
-            // ...
+            // Optionally, populate search results
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchBooks();
+        });
+        
+        function fetchBooks() {
+            fetch('/api/books/list')
+                .then(response => response.json())
+                .then(books => {
+                    const resultsContainer = document.getElementById('searchResults');
+                    resultsContainer.innerHTML = '';
+                    books.forEach(book => {
+                        const bookElement = document.createElement('div');
+                        bookElement.innerHTML = `
+                            <h4>${book.title} by ${book.author}</h4>
+                            <button onclick="borrowBook('${book._id}')">Borrow</button>
+                        `;
+                        resultsContainer.appendChild(bookElement);
+                    });
+                    resultsContainer.style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching books:', error));
+        }
+        
+        function borrowBook(bookId) {
+            console.log('Borrow book:', bookId);
+            window.location.href = `/match-page?bookId=${bookId}`;
         }
     </script>
+    
 </body>
 </html>
