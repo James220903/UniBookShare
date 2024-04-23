@@ -4,7 +4,7 @@ const Book = require('../models/Book');
 const User = require('../models/User'); // Assuming you might also need user information
 
 // POST a new book
-router.post('/', async (req, res) => {
+router.post('/add', async (req, res) => {
     try {
         const { title, author } = req.body;
         if (!title || !author) {
