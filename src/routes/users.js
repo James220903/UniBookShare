@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
       // Login successful, set session info
       req.session.userId = user._id; // Store user ID in session
       req.session.sessionID = req.sessionID; // Store the session ID (UUID generated) in session
-      return res.redirect('/account'); // Redirect to the account page or send a success response
+      return res.redirect('/'); // Redirect to the account page or send a success response
     } else {
       // Login failed
       return res.status(401).send('Login failed');
