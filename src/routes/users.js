@@ -39,29 +39,20 @@ router.post('/submit-registration', async (req, res) => {
 });
 
 // POST route for user login
+// Example login route in your users router file (conceptual)
 router.post('/login', async (req, res) => {
-    try {
-        console.log('Attempting login with:', req.body.email);
-        const user = await User.findOne({ email: req.body.email });
-        if (!user) {
-            console.log('Login failed: User not found with email:', req.body.email);
-            return res.status(401).json({ message: "Login failed: User not found." });
-        }
-
-        // Use the comparePassword method defined in the User model
-        const isMatch = await user.comparePassword(req.body.password);
-        console.log(`Password match for ${req.body.email}: ${isMatch}`);  // Logging the result of the password comparison
-
-        if (!isMatch) {
-            return res.status(401).json({ message: "Login failed: Incorrect password." });
-        }
-
-        res.redirect('/Homepage_English.html');
-    } catch (err) {
-        console.error('Login error:', err);
-        res.status(500).json({ message: "Server error" });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user && await user.comparePassword(password)) {
+      // Login successful, set session info
+      req.session.userId = user._id; // Store user ID in session
+      req.session.sessionID = req.sessionID; // Store the session ID (UUID generated) in session
+      return res.redirect('/account'); // Redirect to the account page or send a success response
+    } else {
+      // Login failed
+      return res.status(401).send('Login failed');
     }
-});
+  });
 
 module.exports = router;
 

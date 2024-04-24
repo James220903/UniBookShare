@@ -6,6 +6,7 @@ const username = 'jamesthorley291'; // Replace with your actual username
 const password = encodeURIComponent('4auoXPWzYuGcxSU1'); // Replace with your actual password
 
 
+
 // Models
 const User = require('./models/User'); // Uncomment when User model is created
 const Book = require('./models/Book'); // Uncomment when Book model is created
@@ -64,6 +65,20 @@ app.get('/account', (req, res) => {
 app.use('/api/users', usersRouter);
 app.use('/api/books', booksRouter);
 app.use('/api/messages', messagesRouter);
+app.use(cookieParser());
+
+
+const session = require('express-session');
+   const { v4: uuidv4 } = require('uuid');
+
+   app.use(session({
+     genid: function(req) {
+       return uuidv4(); // use UUIDs for session IDs
+     },
+     secret: '1234567', // Replace 'yourSecret' with a real secret key
+     resave: false,
+     saveUninitialized: true
+   }));
 
 // Start the server
 app.listen(PORT, () => {
