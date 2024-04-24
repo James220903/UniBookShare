@@ -65,7 +65,7 @@ app.get('/account', (req, res) => {
 app.use('/api/users', usersRouter);
 app.use('/api/books', booksRouter);
 app.use('/api/messages', messagesRouter);
-app.use(cookieParser());
+
 
 
 const session = require('express-session');
