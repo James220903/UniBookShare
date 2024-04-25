@@ -64,7 +64,7 @@ app.post("/register" , async(req , res) => {
     return res.redirect("/register")
   }
   const hashPassword = await bcrypt.hash(password, 12)
-  user = new user ({
+  user = new User ({
     username,
     email, 
     password: hashPassword
