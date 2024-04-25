@@ -12,6 +12,7 @@ const password = encodeURIComponent('4auoXPWzYuGcxSU1'); // Replace with your ac
 const User = require('./models/User'); // Uncomment when User model is created
 const Book = require('./models/Book'); // Uncomment when Book model is created
 const Message = require('./models/Message'); // Uncomment when Message model is created
+const { resourceLimits } = require('worker_threads');
 
 const mongoUri = `mongodb+srv://${username}:${password}@cluster0.qvjhqe8.mongodb.net/`;
 
@@ -54,13 +55,13 @@ app.use(express.urlencoded({ extended: true })); // For parsing application/x-ww
 // Serve static files from the 'public' directory correctly
 app.use(express.static(path.join(__dirname, 'public'))); // 'public' is at the same level as 'src'
 
-
+// post method for registering 
 app.post("/register" , async(req , res) => {
   const { username, email, password } = req.body;
   let user = await User.findOne({email});
 
   if(user){
-    return res.sendFile(path.join(__dirname, 'public', 'Registration.html'));
+    return res.redirect("/register")
   }
   const hashPassword = await bcrypt.hash(password, 12)
   user = new user ({
