@@ -72,6 +72,22 @@ app.post("/register" , async(req , res) => {
   await user.save();
   res.redirect('/login')
 });
+
+app.post("/login", async (req,res) => {
+ const { email, password } = req.body;
+
+ const user = await User.findOne({email});
+ if(!user){
+  return res.redirect('/login');
+ }
+ const isMatch = await bcrypt.compare(password, user.password);
+
+ if(!isMatch){
+  return res.redirect("/login");
+ }
+
+ res.redirect('/home');
+});
 // Correctly send 'Login.html' when the root route is accessed
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Login.html')); // No '..' needed
@@ -87,6 +103,9 @@ app.get('/login', (req, res) => {
 });
 app.get('/account', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Account.html'));
+});
+app.get('/home', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Homepage_English.html'));
 });
 
 
