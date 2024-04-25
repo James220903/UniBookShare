@@ -43,6 +43,13 @@ app.use(session({
   store: store,
 }));
 
+const isAuth = (req ,res, next) =>{
+  if(req.session.isAuth){
+    next()
+  } else{
+    res.redirect('/login')
+  }
+}
 
   // Parse incoming requests with JSON payloads
 
@@ -85,7 +92,7 @@ app.post("/login", async (req,res) => {
  if(!isMatch){
   return res.redirect("/login");
  }
-
+ req.session.isAuth = true;
  res.redirect('/home');
 });
 // Correctly send 'Login.html' when the root route is accessed
@@ -104,7 +111,7 @@ app.get('/login', (req, res) => {
 app.get('/account', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Account.html'));
 });
-app.get('/home', (req, res) => {
+app.get('/home', isAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Homepage_English.html'));
 });
 
