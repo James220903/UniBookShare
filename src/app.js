@@ -141,19 +141,26 @@ app.get('/api/books/list', isAuth, async (req, res) => {
   }
 });
 
-// Example server-side route to list books
-app.get('/api/books/list', isAuth, async (req, res) => {
+app.post("/api/books/add", isAuth, async (req, res) => {
+  // Extract book details from the form submission
+  const { title, author } = req.body;
+
   try {
-      // Assuming you have a reference to the User in your Book model as 'owner'
-      const books = await Book.find().populate('owner', 'username'); // Populate the owner's username
-      res.json(books.map(book => ({
-          title: book.title,
-          author: book.author,
-          ownerUsername: book.owner.username // Send the username instead of the user ID
-      })));
+    // Create and save a new Book instance to the database
+    const newBook = new Book({
+      title,
+      author,
+      owner: req.session.userId // assuming you store user's ID in session upon login
+    });
+
+    await newBook.save();
+
+    // Redirect to the account page or send a success message
+    res.redirect('/home');
   } catch (error) {
-      console.error('Failed to get books:', error);
-      res.status(500).send('Failed to get books.');
+    // If an error occurs, log it and send an error message
+    console.error('Error adding book:', error);
+    res.status(500).send('Error adding book.');
   }
 });
 
