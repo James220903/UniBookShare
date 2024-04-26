@@ -1,5 +1,5 @@
 /* Homepage_English.css */
-/* Updated styles for book items to fill out the page across on the dashboard */
+/* Styling for UniBookShare homepage to display books in a grid */
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -91,22 +91,23 @@ p {
 #searchResults {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start; /* Align items to the start */
-    gap: 20px; /* Space between items */
+    justify-content: space-around; /* Distribute items evenly across the page */
+    align-items: stretch; /* Stretch items vertically */
+    gap: 20px; /* Spacing between items */
     padding: 20px;
-    width: 100%;
 }
 
 .book-item {
-    flex: 1 0 150px; /* Grow to fill available space, don't shrink below 150px */
-    margin: 10px;
+    flex: 1 1 auto; /* Allow the item to grow and shrink, starting with the content's natural size */
+    max-width: calc(33.333% - 40px); /* Three items per row minus the gap */
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+    margin: 10px; /* Margin around items */
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
     min-height: 250px; /* Uniform height for all book items */
 }
 
@@ -136,6 +137,9 @@ footer {
 footer p {
     margin: 0;
 }
+
+/* Media queries can be added if more customization is needed for different screen sizes */
+
 
 /* Media queries for larger screens */
 @media (min-width: 768px) {
