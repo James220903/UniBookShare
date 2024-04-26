@@ -163,6 +163,22 @@ app.post("/api/books/add", isAuth, async (req, res) => {
     res.status(500).send('Error adding book.');
   }
 });
+// POST route to send a message
+app.post('/api/messages/send', isAuth, async (req, res) => {
+  const { content, to } = req.body;
+  try {
+    const newMessage = new Message({
+      from: req.session.userId,
+      to: to,
+      content: content
+    });
+    await newMessage.save();
+    res.status(201).json({ message: 'Message sent successfully' });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
+});
 
 
 // Correctly send 'Login.html' when the root route is accessed
