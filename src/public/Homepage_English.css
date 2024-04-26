@@ -87,12 +87,6 @@ p {
     background-color: #007399;
 }
 
-#searchResults {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 20px;
-}
 
 .book-item {
     margin: 10px;
@@ -132,12 +126,39 @@ footer p {
     margin: 0;
 }
 
-@media (min-width: 769px) {
+#searchResults {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    /* Ensure the container takes full width */
+    width: 100%;
+}
+
+.book-item {
+    /* Set a flexible basis and allow the items to grow */
+    flex: 1 1 200px;
+    /* 200px is the base size, but they can grow */
+    margin: 10px;
+    /* Maximum width of each item */
+    max-width: calc(50% - 20px); /* Adjust the value to control how many items per row */
+    /* Minimum margin between items */
+    min-width: 150px; /* Adjust the min-width as needed */
+}
+
+@media (min-width: 768px) {
     .book-item {
-        flex: 1; /* This will allow items to grow and shrink as needed */
-        margin: 10px;
-        min-width: 200px; /* This will ensure that the item is not smaller than 200px */
-        max-width: calc(25% - 20px); /* This will ensure 4 items in a row with the given margin */
+        /* Set a flexible basis and allow the items to grow, with a larger base size on wider screens */
+        flex: 1 1 200px; /* Items will start at 200px but can grow */
+        max-width: calc(33% - 20px); /* 3 items per row on medium screens */
+    }
+}
+
+@media (min-width: 1024px) {
+    .book-item {
+        /* Set a flexible basis and allow the items to grow, with a larger base size on wider screens */
+        flex: 1 1 200px; /* Items will start at 200px but can grow */
+        max-width: calc(25% - 20px); /* 4 items per row on larger screens */
     }
 }
 
