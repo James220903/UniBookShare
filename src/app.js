@@ -93,6 +93,7 @@ app.post("/login", async (req,res) => {
   return res.redirect("/login");
  }
  req.session.isAuth = true;
+ req.session.userId = user._id;
  res.redirect('/home');
 });
 
@@ -106,6 +107,29 @@ app.post('/logout', (req, res) => {
           res.redirect('/login');
       }
   });
+});
+
+app.post("/api/books/add", isAuth, async (req, res) => {
+  // Extract book details from the form submission
+  const { title, author } = req.body;
+
+  try {
+    // Create and save a new Book instance to the database
+    const newBook = new Book({
+      title,
+      author,
+      owner: req.session.userId // assuming you store user's ID in session upon login
+    });
+
+    await newBook.save();
+
+    // Redirect to the account page or send a success message
+    res.redirect('/account');
+  } catch (error) {
+    // If an error occurs, log it and send an error message
+    console.error('Error adding book:', error);
+    res.status(500).send('Error adding book.');
+  }
 });
 
 // Correctly send 'Login.html' when the root route is accessed
