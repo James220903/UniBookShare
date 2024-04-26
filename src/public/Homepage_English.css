@@ -1,5 +1,5 @@
 /* Homepage_English.css */
-/* Styles to ensure books fill the space on the homepage below the search bar */
+/* Styles to center books on the homepage below the search bar */
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -92,14 +92,14 @@ p {
     display: flex;
     flex-wrap: wrap;
     gap: 20px; /* Space between items */
-    justify-content: flex-start; /* Align items to the start of the line */
-    align-items: stretch; /* Stretch items vertically */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
     padding: 20px;
-    width: 100%; /* Ensure the container takes full width */
+    width: 100%;
 }
 
 .book-item {
-    flex: 1 1 180px; /* Allow the item to grow and have a minimum width of 180px */
+    flex: 0 1 180px; /* Do not grow, allow shrink, and start at 180px wide */
     margin: 10px;
     padding: 20px;
     border: 1px solid #ddd;
@@ -107,22 +107,9 @@ p {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    min-width: 180px; /* Set a minimum width for each book item */
-    min-height: 250px; /* Set a uniform height for all book items */
-    max-width: calc(25% - 40px); /* Adapt the number of items per row */
-    box-sizing: border-box; /* Include padding and border in the element's total width */
-}
-
-@media (min-width: 768px) {
-    .book-item {
-        max-width: calc(33.3333% - 40px); /* 3 items per row */
-    }
-}
-
-@media (min-width: 1024px) {
-    .book-item {
-        max-width: calc(25% - 40px); /* 4 items per row */
-    }
+    min-width: 180px; /* Minimum width for each book item */
+    min-height: 250px; /* Uniform height for all book items */
+    box-sizing: border-box; /* Include padding and border in the width and height */
 }
 
 .book-cover img {
