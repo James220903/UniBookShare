@@ -63,41 +63,42 @@ app.use(express.urlencoded({ extended: true })); // For parsing application/x-ww
 app.use(express.static(path.join(__dirname, 'public'))); // 'public' is at the same level as 'src'
 
 // post method for registering 
-app.post("/register" , async(req , res) => {
-  const { username, email, password } = req.body;
-  let user = await User.findOne({email});
-
-  if(user){
-    return res.redirect("/register")
+app.post("/register", async (req, res) => {
+  let { username, email, password } = req.body;
+  username = username.trim();
+  email = email.trim();
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    return res.redirect("/register");
   }
-  const hashPassword = await bcrypt.hash(password, 12)
-  user = new User ({
+  const hashPassword = await bcrypt.hash(password.trim(), 12);
+  const user = new User({
     username,
-    email, 
+    email,
     password: hashPassword
   });
   await user.save();
-  res.redirect('/login')
+  res.redirect('/login');
 });
 
+
 app.post("/login", async (req, res) => {
-  console.log("Attempting login with", req.body);
-  const { email, password } = req.body;
-  const user = await User.findOne({email});
-  console.log("User found:", user);
+  let { email, password } = req.body;
+  email = email.trim();
+  password = password.trim();
+  const user = await User.findOne({ email });
   if (!user) {
-      return res.redirect('/login');
+    return res.redirect('/login');
   }
   const isMatch = await bcrypt.compare(password, user.password);
-  console.log("Password match:", isMatch);
   if (!isMatch) {
-      return res.redirect("/login");
+    return res.redirect("/login");
   }
   req.session.isAuth = true;
   req.session.userId = user._id;
-  console.log("Session:", req.session);
   res.redirect('/home');
 });
+
 
 
 app.post('/logout', (req, res) => {
