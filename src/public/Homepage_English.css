@@ -132,8 +132,12 @@ footer p {
     margin: 0;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 769px) {
     .book-item {
-        width: calc(100% - 20px);
+        flex: 1; /* This will allow items to grow and shrink as needed */
+        margin: 10px;
+        min-width: 200px; /* This will ensure that the item is not smaller than 200px */
+        max-width: calc(25% - 20px); /* This will ensure 4 items in a row with the given margin */
     }
 }
+
