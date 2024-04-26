@@ -80,22 +80,25 @@ app.post("/register" , async(req , res) => {
   res.redirect('/login')
 });
 
-app.post("/login", async (req,res) => {
- const { email, password } = req.body;
-
- const user = await User.findOne({email});
- if(!user){
-  return res.redirect('/login');
- }
- const isMatch = await bcrypt.compare(password, user.password);
-
- if(!isMatch){
-  return res.redirect("/login");
- }
- req.session.isAuth = true;
- req.session.userId = user._id;
- res.redirect('/home');
+app.post("/login", async (req, res) => {
+  console.log("Attempting login with", req.body);
+  const { email, password } = req.body;
+  const user = await User.findOne({email});
+  console.log("User found:", user);
+  if (!user) {
+      return res.redirect('/login');
+  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  console.log("Password match:", isMatch);
+  if (!isMatch) {
+      return res.redirect("/login");
+  }
+  req.session.isAuth = true;
+  req.session.userId = user._id;
+  console.log("Session:", req.session);
+  res.redirect('/home');
 });
+
 
 app.post('/logout', (req, res) => {
   req.session.destroy(err => {
