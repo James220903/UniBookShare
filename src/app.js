@@ -95,6 +95,19 @@ app.post("/login", async (req,res) => {
  req.session.isAuth = true;
  res.redirect('/home');
 });
+
+app.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+      if(err) {
+          console.log(err);
+          res.status(500).send('Could not log out, please try again.');
+      } else {
+          res.clearCookie('connect.sid'); // The name of the cookie used for the session. This might be different depending on your setup.
+          res.redirect('/login');
+      }
+  });
+});
+
 // Correctly send 'Login.html' when the root route is accessed
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Login.html')); // No '..' needed
