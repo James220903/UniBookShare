@@ -99,16 +99,16 @@ p {
 }
 
 .book-item {
-    flex: 0 1 180px; /* Do not grow, allow shrink, and start at 180px wide */
+    flex: 0 1 150px; /* Do not grow, allow shrink, and start at 150px wide */
     margin: 10px;
-    padding: 20px;
+    padding: 15px; /* Reduced padding */
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    min-width: 180px; /* Minimum width for each book item */
-    min-height: 250px; /* Uniform height for all book items */
+    min-width: 150px; /* Smaller minimum width for each book item */
+    min-height: 200px; /* Smaller uniform height for all book items */
     box-sizing: border-box; /* Include padding and border in the width and height */
 }
 
