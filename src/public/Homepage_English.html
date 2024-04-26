@@ -70,7 +70,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             fetchBooks();
         });
-        
+
         function fetchBooks(query = '') {
     fetch(`/api/books/list?q=${encodeURIComponent(query)}`)
         .then(response => response.json())
@@ -80,11 +80,10 @@
             books.forEach(book => {
                 const bookElement = document.createElement('div');
                 bookElement.className = 'book-item';
-                // Check if book.coverImageUrl is provided, otherwise use 'cover.jpg'
                 const coverImage = book.coverImageUrl || 'cover.jpg';
                 bookElement.innerHTML = `
                     <div class="book-cover">
-                        <img src="${coverImage}" alt="Cover image">
+                        <img src="${coverImage}" alt="Cover image of ${book.title}">
                     </div>
                     <div class="book-info">
                         <h4>${book.title}</h4>
@@ -92,6 +91,20 @@
                         <p>Owner: ${book.ownerUsername}</p>
                     </div>
                 `;
+                
+                // Create the "Talk" button
+                const talkButton = document.createElement('button');
+                talkButton.textContent = 'Talk';
+                talkButton.className = 'talk-button';
+                talkButton.onclick = function() {
+                    // This function will need to open the messaging interface
+                    openMessaging(book.ownerUsername, book._id);
+                };
+
+                // Append the button to the book element
+                bookElement.appendChild(talkButton);
+                
+                // Append the book element to the results container
                 resultsContainer.appendChild(bookElement);
             });
             resultsContainer.style.display = 'block'; // Show the results
@@ -101,6 +114,15 @@
             // Handle errors, such as showing a message to the user
         });
 }
+
+function openMessaging(ownerUsername, bookId) {
+    // Here you might set some sessionStorage or navigate to a messaging page
+    sessionStorage.setItem('ownerUsername', ownerUsername);
+    sessionStorage.setItem('bookId', bookId);
+    window.location.href = '/messaging'; // Assuming you have a separate page for messaging
+}
+        
+       
     </script>
     
 </body>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Messaging.css">
+    <title>Messaging</title>
+</head>
+<body>
+    <header>
+        <h1>Messaging</h1>
+    </header>
+    <main>
+        <div id="message-container">
+            <!-- Messages will be dynamically added here -->
+        </div>
+        <form id="message-form">
+            <input type="text" id="message-input" placeholder="Type a message..." required>
+            <button type="submit">Send</button>
+        </form>
+        <button id="exchange-button">Exchange Books</button>
+    </main>
+    <script src="app.js"></script> <!-- For handling WebSocket and AJAX -->
+</body>
+</html>

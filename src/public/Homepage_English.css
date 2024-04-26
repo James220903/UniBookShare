@@ -130,6 +130,21 @@ footer {
     width: 100%;
 }
 
+.talk-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.talk-button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+
 footer p {
     margin: 0;
 }

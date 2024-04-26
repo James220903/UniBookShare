@@ -184,7 +184,9 @@ app.get('/account', (req, res) => {
 app.get('/home', isAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Homepage_English.html'));
 });
-
+app.get('/messaging', isAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Messaging.html'));
+});
 
 
 
