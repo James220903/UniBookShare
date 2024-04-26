@@ -64,22 +64,33 @@ app.use(express.static(path.join(__dirname, 'public'))); // 'public' is at the s
 
 // post method for registering 
 app.post("/register", async (req, res) => {
-  let { username, email, password } = req.body;
-  username = username.trim();
-  email = email.trim();
-  const userExists = await User.findOne({ email });
+  const { username, email, password } = req.body;
+  
+  // First, check if the user already exists
+  let userExists = await User.findOne({ email });
   if (userExists) {
+    // If the user exists, redirect back to the registration page
+    // Optionally, inform the user that the email is already taken
     return res.redirect("/register");
   }
-  const hashPassword = await bcrypt.hash(password.trim(), 12);
+
+  // If the user does not exist, create a new user instance
   const user = new User({
     username,
     email,
-    password: hashPassword
+    password // No need to hash here; the model will handle it
   });
-  await user.save();
-  res.redirect('/login');
+
+  // Save the new user
+  try {
+    await user.save();
+    res.redirect('/login');
+  } catch (error) {
+    console.error("Error saving user:", error);
+    res.status(500).send("Error registering user.");
+  }
 });
+
 
 
 app.post("/login", async (req, res) => {
