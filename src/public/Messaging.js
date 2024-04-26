@@ -1,45 +1,57 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const messageForm = document.getElementById('message-form');
-    const messageInput = document.getElementById('message-input');
-    const messageContainer = document.getElementById('message-container');
-    const receiverId = 'someUserIdOrUsername';  // Define the receiver's ID or username
+// Pseudocode Plan:
+// 1. Extract socket initialization and event listeners into separate functions
+// 2. Use more descriptive variable names
+// 3. Implement error handling for missing DOM elements
+// 4. Use template literals for string interpolation
+// 5. Separate concerns by moving message appending logic to a separate function
 
-    // Function to append messages to the container
-    const appendMessage = (message, fromSelf) => {
-        const messageDiv = document.createElement('div');
-        messageDiv.textContent = message;
-        messageDiv.className = fromSelf ? 'my-message' : 'their-message';
-        messageContainer.appendChild(messageDiv);
-    };
+// Initialize the socket connection
+const socket = io();
 
-    messageForm.addEventListener('submit', event => {
-        event.preventDefault();
-        const message = messageInput.value;
-        if (!message) return;
+document.addEventListener('DOMContentLoaded', initializeChat);
 
-        fetch('/api/messages/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                content: message, 
-                to: receiverId  // Use the receiverId in the POST request
-            }),
-            credentials: 'include'  // Ensures cookies, such as session cookies, are sent with the request
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                // Handle success
-                appendMessage(message, true);
-                messageInput.value = ''; // Clear input after sending
-            } else {
-                // Handle failure
-                console.error('Failed to send message:', data.error);
-            }
-        })
-        .catch(error => console.error('Error sending message:', error));
-    });
-});
+function initializeChat() {
+  const messageFormElement = document.getElementById('message-form');
+  const messageInputElement = document.getElementById('message-input');
+  const messageContainerElement = document.getElementById('message-container');
+
+  // Error handling for missing DOM elements
+  if (!messageFormElement || !messageInputElement || !messageContainerElement) {
+    console.error('Missing required DOM elements');
+    return;
+  }
+
+  const roomId = sessionStorage.getItem('bookId');
+  const username = sessionStorage.getItem('username');
+
+  if (roomId) {
+    socket.emit('joinRoom', { roomId, username });
+  }
+
+  setupSocketListeners(messageContainerElement);
+  setupMessageFormListener(messageFormElement, messageInputElement, roomId);
+}
+
+function setupSocketListeners(messageContainerElement) {
+  socket.on('message', (message) => {
+    appendMessage(messageContainerElement, message, false);
+  });
+}
+
+function setupMessageFormListener(messageFormElement, messageInputElement, roomId) {
+  messageFormElement.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const messageText = messageInputElement.value.trim();
+    if (!messageText) return;
+
+    socket.emit('chatMessage', { roomId, message: messageText });
+    appendMessage(messageContainerElement, messageText, true);
+    messageInputElement.value = '';
+  });
+}
+
+function appendMessage(messageContainerElement, message, isSelf) {
+  const messageElement = document.createElement('div');
+  messageElement.textContent = `${isSelf ? 'You' : 'Other'}: ${message}`;
+  messageContainerElement.appendChild(messageElement);
+}

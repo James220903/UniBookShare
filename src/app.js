@@ -1,26 +1,21 @@
-require('dotenv').config(); // Make sure to require 'dotenv' at the top
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const session = require('express-session');
-const MongoDBSession = require('connect-mongodb-session')(session)
+const MongoDBSession = require('connect-mongodb-session')(session);
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const path = require('path');
-const username = 'jamesthorley291'; // Replace with your actual username
-const password = encodeURIComponent('4auoXPWzYuGcxSU1'); // Replace with your actual password
+const username = 'jamesthorley291';
+const password = encodeURIComponent('4auoXPWzYuGcxSU1');
+
 // Models
-const User = require('./models/User'); // Uncomment when User model is created
-const Book = require('./models/Book'); // Uncomment when Book model is created
-const Message = require('./models/Message'); // Uncomment when Message model is created
-const { resourceLimits } = require('worker_threads');
+const User = require('./models/User');
+const Book = require('./models/Book');
+const Message = require('./models/Message');
 
 const mongoUri = `mongodb+srv://${username}:${password}@cluster0.qvjhqe8.mongodb.net/`;
-
-
-
-
 const PORT = process.env.PORT || 3000;
-
 
 // Connect to MongoDB
 mongoose.connect(mongoUri)
@@ -28,13 +23,13 @@ mongoose.connect(mongoUri)
     console.log('Connected to MongoDB');
   })
   .catch((err) => {
-    console.log('Error connecting to MongoDB: ', err);
+    console.error('Error connecting to MongoDB:', err);
   });
 
 const store = new MongoDBSession({
   uri: mongoUri,
   collection: 'mySessions',
-})
+});
 
 app.use(session({
   secret: 'key that will sign cookie',
@@ -43,42 +38,35 @@ app.use(session({
   store: store,
 }));
 
-const isAuth = (req ,res, next) =>{
-  if(req.session.isAuth){
-    next()
-  } else{
-    res.redirect('/login')
+const isAuth = (req, res, next) => {
+  if (req.session.isAuth) {
+    next();
+  } else {
+    res.redirect('/login');
   }
-}
-
-  // Parse incoming requests with JSON payloads
-
-
+};
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
-// Routes
-// Serve static files from the 'public' directory correctly
-app.use(express.static(path.join(__dirname, 'public'))); // 'public' is at the same level as 'src'
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-// post method for registering 
+// Register a new user
 app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
-  
-  // First, check if the user already exists
-  let userExists = await User.findOne({ email });
+
+  // Check if the user already exists
+  const userExists = await User.findOne({ email });
   if (userExists) {
-    // If the user exists, redirect back to the registration page
-    // Optionally, inform the user that the email is already taken
     return res.redirect("/register");
   }
 
-  // If the user does not exist, create a new user instance
+  // Create a new user instance
   const user = new User({
     username,
     email,
-    password // No need to hash here; the model will handle it
+    password,
   });
 
   // Save the new user
@@ -91,17 +79,14 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
-
+// User login
 app.post("/login", async (req, res) => {
-  let { email, password } = req.body;
-  email = email.trim();
-  password = password.trim();
-  const user = await User.findOne({ email });
+  const { email, password } = req.body;
+  const user = await User.findOne({ email: email.trim() });
   if (!user) {
     return res.redirect('/login');
   }
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password.trim(), user.password);
   if (!isMatch) {
     return res.redirect("/login");
   }
@@ -110,27 +95,25 @@ app.post("/login", async (req, res) => {
   res.redirect('/home');
 });
 
-
-
+// User logout
 app.post('/logout', (req, res) => {
   req.session.destroy(err => {
-      if(err) {
-          console.log(err);
-          res.status(500).send('Could not log out, please try again.');
-      } else {
-          res.clearCookie('connect.sid'); // The name of the cookie used for the session. This might be different depending on your setup.
-          res.redirect('/login');
-      }
+    if (err) {
+      console.error(err);
+      res.status(500).send('Could not log out, please try again.');
+    } else {
+      res.clearCookie('connect.sid');
+      res.redirect('/login');
+    }
   });
 });
 
-// Endpoint to list books or return search results
+// List books or return search results
 app.get('/api/books/list', isAuth, async (req, res) => {
-  const searchQuery = req.query.q || ''; // Get the search query parameter
+  const searchQuery = req.query.q || '';
   try {
     let books;
     if (searchQuery) {
-      // Use a regex to search for the query in the title or author fields, case-insensitive
       books = await Book.find({
         $or: [
           { title: new RegExp(searchQuery, 'i') },
@@ -138,15 +121,13 @@ app.get('/api/books/list', isAuth, async (req, res) => {
         ]
       }).populate('owner', 'username');
     } else {
-      // If no search query, return all books
       books = await Book.find().populate('owner', 'username');
     }
 
-    // Map the books to include only the required fields
     const booksToSend = books.map(book => ({
-        title: book.title,
-        author: book.author,
-        ownerUsername: book.owner.username
+      title: book.title,
+      author: book.author,
+      ownerUsername: book.owner.username
     }));
 
     res.json(booksToSend);
@@ -156,31 +137,31 @@ app.get('/api/books/list', isAuth, async (req, res) => {
   }
 });
 
+// Add a new book
 app.post("/api/books/add", isAuth, async (req, res) => {
-  // Extract book details from the form submission
   const { title, author } = req.body;
 
   try {
-    // Create and save a new Book instance to the database
     const newBook = new Book({
       title,
       author,
-      owner: req.session.userId // assuming you store user's ID in session upon login
+      owner: req.session.userId,
     });
 
     await newBook.save();
-
-    // Redirect to the account page or send a success message
     res.redirect('/home');
   } catch (error) {
-    // If an error occurs, log it and send an error message
     console.error('Error adding book:', error);
     res.status(500).send('Error adding book.');
   }
 });
-// POST route to send a message
+
+// Send a message
 app.post('/api/messages/send', isAuth, async (req, res) => {
   const { content, to } = req.body;
+  if (!mongoose.Types.ObjectId.isValid(to)) {
+    return res.status(400).json({ error: 'Invalid recipient ID format' });
+  }
   try {
     const newMessage = new Message({
       from: req.session.userId,
@@ -191,37 +172,60 @@ app.post('/api/messages/send', isAuth, async (req, res) => {
     res.status(201).json({ message: 'Message sent successfully' });
   } catch (error) {
     console.error('Error sending message:', error);
-    res.status(500).json({ error: 'Failed to send message' });
+    res.status(500).json({ error: 'Failed to send message', details: error });
   }
 });
 
-
-// Correctly send 'Login.html' when the root route is accessed
+// Serve HTML files
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'Login.html')); // No '..' needed
+  res.sendFile(path.join(__dirname, 'public', 'Login.html'));
 });
-// Route for serving the registration page
+
 app.get('/register', (req, res) => {
   req.session.isAuth = true;
   res.sendFile(path.join(__dirname, 'public', 'Registration.html'));
 });
-// Route for serving the login from the registration page 
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Login.html'));
 });
+
 app.get('/account', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Account.html'));
 });
+
 app.get('/home', isAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Homepage_English.html'));
 });
+
 app.get('/messaging', isAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Messaging.html'));
 });
 
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  // Join a room
+  socket.on('joinRoom', ({ roomId, username }) => {
+    socket.join(roomId);
+    console.log(`${username} joined room: ${roomId}`);
+
+    // Broadcast to the room, excluding the sender
+    socket.to(roomId).broadcast.emit('message', `${username} has joined the chat`);
+  });
+
+  // Handle sending and receiving messages
+  socket.on('chatMessage', ({ roomId, message }) => {
+    io.to(roomId).emit('message', message);
+  });
+});
 
 // Start the server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
