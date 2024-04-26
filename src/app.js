@@ -124,7 +124,7 @@ app.post("/api/books/add", isAuth, async (req, res) => {
     await newBook.save();
 
     // Redirect to the account page or send a success message
-    res.redirect('/account');
+    res.redirect('/home');
   } catch (error) {
     // If an error occurs, log it and send an error message
     console.error('Error adding book:', error);
