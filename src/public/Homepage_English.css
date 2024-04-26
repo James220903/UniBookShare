@@ -1,5 +1,6 @@
 /* Homepage_English.css */
-/* Add this to your Homepage_English.css file */
+/* Updated styles for book items to fill out the page across on the dashboard */
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #fdfdfd;
@@ -87,8 +88,17 @@ p {
     background-color: #007399;
 }
 
+#searchResults {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Align items to the start */
+    gap: 20px; /* Space between items */
+    padding: 20px;
+    width: 100%;
+}
 
 .book-item {
+    flex: 1 0 150px; /* Grow to fill available space, don't shrink below 150px */
     margin: 10px;
     padding: 20px;
     border: 1px solid #ddd;
@@ -96,7 +106,8 @@ p {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    width: 200px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    min-height: 250px; /* Uniform height for all book items */
 }
 
 .book-item:hover {
@@ -126,39 +137,15 @@ footer p {
     margin: 0;
 }
 
-#searchResults {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 20px;
-    /* Ensure the container takes full width */
-    width: 100%;
-}
-
-.book-item {
-    /* Set a flexible basis and allow the items to grow */
-    flex: 1 1 200px;
-    /* 200px is the base size, but they can grow */
-    margin: 10px;
-    /* Maximum width of each item */
-    max-width: calc(50% - 20px); /* Adjust the value to control how many items per row */
-    /* Minimum margin between items */
-    min-width: 150px; /* Adjust the min-width as needed */
-}
-
+/* Media queries for larger screens */
 @media (min-width: 768px) {
     .book-item {
-        /* Set a flexible basis and allow the items to grow, with a larger base size on wider screens */
-        flex: 1 1 200px; /* Items will start at 200px but can grow */
-        max-width: calc(33% - 20px); /* 3 items per row on medium screens */
+        flex: 1 0 180px; /* Don't shrink below 180px */
     }
 }
 
 @media (min-width: 1024px) {
     .book-item {
-        /* Set a flexible basis and allow the items to grow, with a larger base size on wider screens */
-        flex: 1 1 200px; /* Items will start at 200px but can grow */
-        max-width: calc(25% - 20px); /* 4 items per row on larger screens */
+        flex: 1 0 200px; /* Don't shrink below 200px */
     }
 }
-
