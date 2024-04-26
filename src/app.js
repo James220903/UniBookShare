@@ -131,6 +131,15 @@ app.post("/api/books/add", isAuth, async (req, res) => {
     res.status(500).send('Error adding book.');
   }
 });
+app.get('/api/books/list', isAuth, async (req, res) => {
+  try {
+      const books = await Book.find({}); // Find all books or implement filtering logic
+      res.json(books);
+  } catch (error) {
+      console.error('Failed to get books:', error);
+      res.status(500).send('Failed to get books.');
+  }
+});
 
 // Correctly send 'Login.html' when the root route is accessed
 app.get('/', (req, res) => {
