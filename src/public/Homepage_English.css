@@ -1,4 +1,5 @@
 /* Homepage_English.css */
+/* Add this to your Homepage_English.css file */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #fdfdfd;
@@ -23,14 +24,6 @@ header nav ul li {
     display: inline;
     margin-right: 20px;
 }
-/* Add this to your Homepage_English.css file */
-.book-item {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
 
 header nav ul li a,
 header nav ul li button {
@@ -52,7 +45,6 @@ header nav ul li a:hover {
     text-align: center;
     padding: 10px 0;
     background: #003559;
-    display: none; /* hidden by default */
 }
 
 main {
@@ -62,7 +54,6 @@ main {
 
 h1 {
     color: #003559;
-    margin-bottom: 10px;
 }
 
 p {
@@ -96,17 +87,53 @@ p {
     background-color: #007399;
 }
 
+#searchResults {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.book-item {
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 200px;
+}
+
+.book-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.book-cover img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.book-info {
+    text-align: left;
+}
+
 footer {
     background-color: #004d7a;
     color: white;
     text-align: center;
     padding: 10px 0;
-    position: sticky;
-    bottom: 0;
     width: 100%;
 }
 
-
 footer p {
     margin: 0;
+}
+
+@media (max-width: 768px) {
+    .book-item {
+        width: calc(100% - 20px);
+    }
 }

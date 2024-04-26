@@ -131,15 +131,22 @@ app.post("/api/books/add", isAuth, async (req, res) => {
     res.status(500).send('Error adding book.');
   }
 });
+// Example server-side route to list books
 app.get('/api/books/list', isAuth, async (req, res) => {
   try {
-      const books = await Book.find({}); // Find all books or implement filtering logic
-      res.json(books);
+      // Assuming you have a reference to the User in your Book model as 'owner'
+      const books = await Book.find().populate('owner', 'username'); // Populate the owner's username
+      res.json(books.map(book => ({
+          title: book.title,
+          author: book.author,
+          ownerUsername: book.owner.username // Send the username instead of the user ID
+      })));
   } catch (error) {
       console.error('Failed to get books:', error);
       res.status(500).send('Failed to get books.');
   }
 });
+
 
 // Correctly send 'Login.html' when the root route is accessed
 app.get('/', (req, res) => {
