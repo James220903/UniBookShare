@@ -109,28 +109,38 @@ app.post('/logout', (req, res) => {
   });
 });
 
-app.post("/api/books/add", isAuth, async (req, res) => {
-  // Extract book details from the form submission
-  const { title, author } = req.body;
-
+// Endpoint to list books or return search results
+app.get('/api/books/list', isAuth, async (req, res) => {
+  const searchQuery = req.query.q || ''; // Get the search query parameter
   try {
-    // Create and save a new Book instance to the database
-    const newBook = new Book({
-      title,
-      author,
-      owner: req.session.userId // assuming you store user's ID in session upon login
-    });
+    let books;
+    if (searchQuery) {
+      // Use a regex to search for the query in the title or author fields, case-insensitive
+      books = await Book.find({
+        $or: [
+          { title: new RegExp(searchQuery, 'i') },
+          { author: new RegExp(searchQuery, 'i') }
+        ]
+      }).populate('owner', 'username');
+    } else {
+      // If no search query, return all books
+      books = await Book.find().populate('owner', 'username');
+    }
 
-    await newBook.save();
+    // Map the books to include only the required fields
+    const booksToSend = books.map(book => ({
+        title: book.title,
+        author: book.author,
+        ownerUsername: book.owner.username
+    }));
 
-    // Redirect to the account page or send a success message
-    res.redirect('/home');
+    res.json(booksToSend);
   } catch (error) {
-    // If an error occurs, log it and send an error message
-    console.error('Error adding book:', error);
-    res.status(500).send('Error adding book.');
+    console.error('Failed to get books:', error);
+    res.status(500).send('Failed to get books.');
   }
 });
+
 // Example server-side route to list books
 app.get('/api/books/list', isAuth, async (req, res) => {
   try {
