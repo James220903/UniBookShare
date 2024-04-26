@@ -72,33 +72,35 @@
         });
         
         function fetchBooks(query = '') {
-            fetch(`/api/books/list?q=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(books => {
-                    const resultsContainer = document.getElementById('searchResults');
-                    resultsContainer.innerHTML = ''; // Clear previous results
-                    books.forEach(book => {
-                        const bookElement = document.createElement('div');
-                        bookElement.className = 'book-item';
-                        bookElement.innerHTML = `
-                            <div class="book-cover">
-                                <img src="${book.coverImageUrl || 'default_cover.jpg'}" alt="Cover image">
-                            </div>
-                            <div class="book-info">
-                                <h4>${book.title}</h4>
-                                <p>Author: ${book.author}</p>
-                                <p>Owner: ${book.ownerUsername}</p>
-                            </div>
-                        `;
-                        resultsContainer.appendChild(bookElement);
-                    });
-                    resultsContainer.style.display = 'block'; // Show the results
-                })
-                .catch(error => {
-                    console.error('Error fetching books:', error);
-                    // Handle errors, such as showing a message to the user
-                });
-        }
+    fetch(`/api/books/list?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(books => {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = ''; // Clear previous results
+            books.forEach(book => {
+                const bookElement = document.createElement('div');
+                bookElement.className = 'book-item';
+                // Check if book.coverImageUrl is provided, otherwise use 'cover.jpg'
+                const coverImage = book.coverImageUrl || 'cover.jpg';
+                bookElement.innerHTML = `
+                    <div class="book-cover">
+                        <img src="${coverImage}" alt="Cover image">
+                    </div>
+                    <div class="book-info">
+                        <h4>${book.title}</h4>
+                        <p>Author: ${book.author}</p>
+                        <p>Owner: ${book.ownerUsername}</p>
+                    </div>
+                `;
+                resultsContainer.appendChild(bookElement);
+            });
+            resultsContainer.style.display = 'block'; // Show the results
+        })
+        .catch(error => {
+            console.error('Error fetching books:', error);
+            // Handle errors, such as showing a message to the user
+        });
+}
     </script>
     
 </body>
