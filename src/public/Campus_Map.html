@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Map Example</title>
+    <title>University Campus Map</title>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
     <style>
         #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -12,26 +12,62 @@
     <div id="map"></div>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js'></script>
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoiamFtc3RlcjEyMzQ1NiIsImEiOiJjbHZ6N2NmeHMwM2plMmpteGU0MDZzZHRvIn0.fxbgGMZ37Dso-kP4JnDPEw'; // Replace with your Mapbox access token
+        mapboxgl.accessToken = 'pk.eyJ1IjoiamFtc3RlcjEyMzQ1NiIsImEiOiJjbHZ6N2NmeHMwM2plMmpteGU0MDZzZHRvIn0.fxbgGMZ37Dso-kP4JnDPEw'; // Replace with your actual access token
         var map = new mapboxgl.Map({
-            container: 'map', // container ID
-            style: 'mapbox://styles/mapbox/streets-v11', // style URL
-            center: [-0.366529, 53.769338], // Starting position [lng, lat] at the University of Hull
-            zoom: 15 // Starting zoom
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-0.367529, 53.768338], // Center the map among the buildings
+            zoom: 15
         });
 
-        // Add event listeners after map loads
         map.on('load', function() {
-            // Respond to click events
-            map.on('click', function(e) {
-                console.log(`You clicked at ${e.lngLat.lat}, ${e.lngLat.lng}`);
+            // Array of routes to be drawn
+            const routes = [
+                { from: [-0.368529, 53.769338], to: [-0.367529, 53.768338] }, // Allam Building to Chemistry
+                { from: [-0.367529, 53.768338], to: [-0.366529, 53.767338] }, // Chemistry to Computer Services
+                { from: [-0.366529, 53.767338], to: [-0.365529, 53.766338] }  // Computer Services to International Sport Arena
+            ];
+
+            routes.forEach((route, index) => {
+                drawRoute(route.from, route.to, index);
             });
 
-            // Respond to mousemove events
-            map.on('mousemove', function(e) {
-                document.getElementById('info').innerHTML =
-                    `Longitude: ${e.lngLat.lng} <br> Latitude: ${e.lngLat.lat}`;
-            });
+            function drawRoute(start, end, index) {
+                var url = `https://api.mapbox.com/directions/v5/mapbox/walking/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`;
+                
+                fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var route = data.routes[0].geometry.coordinates;
+                    var geojson = {
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: route
+                        }
+                    };
+                    // Add the route to the map
+                    map.addLayer({
+                        id: `route-${index}`,
+                        type: 'line',
+                        source: {
+                            type: 'geojson',
+                            data: geojson
+                        },
+                        layout: {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        paint: {
+                            'line-color': '#ff0000',
+                            'line-width': 5,
+                            'line-opacity': 0.75
+                        }
+                    });
+                })
+                .catch(err => console.error('Error fetching directions:', err));
+            }
         });
     </script>
 </body>
