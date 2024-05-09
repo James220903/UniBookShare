@@ -201,6 +201,9 @@ app.get('/home', isAuth, (req, res) => {
 app.get('/messaging', isAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'Messaging.html'));
 });
+app.get('/campus-map', isAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'Campus_Map.html'));
+});
 
 const http = require('http');
 const server = http.createServer(app);
